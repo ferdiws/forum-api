@@ -1,5 +1,6 @@
 const DetailComment = require("../../Domains/comments/entities/DetailComment");
 const DetailReply = require("../../Domains/replies/entities/DetailReply");
+const DetailThread = require("../../Domains/threads/entities/DetailThread");
 
 class GetThreadUseCase {
   constructor({ threadRepository, commentRepository, replyRepository }) {
@@ -18,7 +19,7 @@ class GetThreadUseCase {
       comments,
       replies,
     );
-    return thread;
+    return new DetailThread(thread);
   }
 
   _mapAdditionalAttributes(comments, replies) {

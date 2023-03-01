@@ -71,6 +71,17 @@ describe('ThreadRepositoryPostgres', () => {
 
       await expect(commentRepositoryPostgres.verifyAvailableComment('comment-111')).rejects.toThrow(NotFoundError);
     });
+
+    it('should not throw error if comment is found', async () => {
+      await UsersTableTestHelper.addUser({ id: 'user-123' });
+      await ThreadsTableTestHelper.addThread({ id: 'thread-123' });
+      await CommentsTableTestHelper.addComment({ id: 'comment-123' });
+
+      const fakeIdGenerator = () => '123';
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, fakeIdGenerator);
+
+      await expect(commentRepositoryPostgres.verifyAvailableComment('comment-123')).resolves.not.toThrow(NotFoundError);
+    });
   });
 
   describe('verifyUserAccess function', () => {
@@ -91,6 +102,17 @@ describe('ThreadRepositoryPostgres', () => {
       await commentRepositoryPostgres.addComment(newComment);
 
       await expect(commentRepositoryPostgres.verifyUserAccess('comment-123', 'user-111')).rejects.toThrow(AuthorizationError);
+    });
+
+    it('should not throw error if user has access', async () => {
+      await UsersTableTestHelper.addUser({ id: 'user-123' });
+      await ThreadsTableTestHelper.addThread({ id: 'thread-123' });
+      await CommentsTableTestHelper.addComment({ id: 'comment-123' });
+
+      const fakeIdGenerator = () => '123';
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, fakeIdGenerator);
+
+      await expect(commentRepositoryPostgres.verifyUserAccess('comment-123', 'user-123')).resolves.not.toThrow(AuthorizationError);
     });
   });
 
@@ -132,6 +154,8 @@ describe('ThreadRepositoryPostgres', () => {
       expect(comments[0].id).toEqual('comment-123');
       expect(comments[0].content).toEqual('sebuah comment');
       expect(comments[0].username).toEqual('dicoding');
+      expect(comments[0].date).toEqual('2021-08-08T07:19:09.775Z');
+      expect(comments[0].is_delete).toEqual(1);
     });
   });
 });

@@ -66,6 +66,16 @@ describe('ThreadRepositoryPostgres', () => {
 
       await expect(threadRepositoryPostgres.verifyAvailableThread('thread-111')).rejects.toThrow(NotFoundError);
     });
+
+    it('should not throw error if thread is found', async () => {
+      await UsersTableTestHelper.addUser({ id: 'user-123' });
+      await ThreadsTableTestHelper.addThread({ id: 'thread-123' });
+
+      const fakeIdGenerator = () => '123';
+      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, fakeIdGenerator);
+
+      await expect(threadRepositoryPostgres.verifyAvailableThread('thread-123')).resolves.not.toThrow(NotFoundError);
+    });
   });
 
   describe('getThreadById function', () => {
@@ -81,6 +91,7 @@ describe('ThreadRepositoryPostgres', () => {
       expect(thread.title).toEqual('sebuah thread');
       expect(thread.body).toEqual('sebuah body thread');
       expect(thread.username).toEqual('dicoding');
+      expect(thread.date).toEqual('2021-08-08T07:19:09.775Z');
     });
   });
 });

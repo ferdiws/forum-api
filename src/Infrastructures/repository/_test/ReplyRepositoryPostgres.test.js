@@ -77,6 +77,18 @@ describe('ReplyRepositoryPostgres', () => {
 
       await expect(replyRepositoryPostgres.verifyAvailableReply('reply-111')).rejects.toThrow(NotFoundError);
     });
+
+    it('should not throw error if reply is found', async () => {
+      await UsersTableTestHelper.addUser({ id: 'user-123' });
+      await ThreadsTableTestHelper.addThread({ id: 'thread-123' });
+      await CommentsTableTestHelper.addComment({ id: 'comment-123' });
+      await RepliesTableTestHelper.addReply({ id: 'reply-123' });
+
+      const fakeIdGenerator = () => '123';
+      const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, fakeIdGenerator);
+
+      await expect(replyRepositoryPostgres.verifyAvailableReply('reply-123')).resolves.not.toThrow(NotFoundError);
+    });
   });
 
   describe('verifyUserAccess function', () => {
@@ -99,6 +111,18 @@ describe('ReplyRepositoryPostgres', () => {
       await replyRepositoryPostgres.addReply(newReply);
 
       await expect(replyRepositoryPostgres.verifyUserAccess('reply-123', 'user-111')).rejects.toThrow(AuthorizationError);
+    });
+
+    it('should not throw error if user has access', async () => {
+      await UsersTableTestHelper.addUser({ id: 'user-123' });
+      await ThreadsTableTestHelper.addThread({ id: 'thread-123' });
+      await CommentsTableTestHelper.addComment({ id: 'comment-123' });
+      await RepliesTableTestHelper.addReply({ id: 'reply-123' });
+
+      const fakeIdGenerator = () => '123';
+      const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, fakeIdGenerator);
+
+      await expect(replyRepositoryPostgres.verifyUserAccess('reply-123', 'user-123')).resolves.not.toThrow(AuthorizationError);
     });
   });
 
@@ -144,6 +168,8 @@ describe('ReplyRepositoryPostgres', () => {
       expect(replies[0].content).toEqual('sebuah balasan');
       expect(replies[0].comment_id).toEqual('comment-123');
       expect(replies[0].username).toEqual('dicoding');
+      expect(replies[0].date).toEqual('2021-08-08T07:19:09.775Z');
+      expect(replies[0].is_delete).toEqual(1);
     });
   });
 });
