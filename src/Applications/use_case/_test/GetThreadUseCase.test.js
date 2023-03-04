@@ -14,21 +14,21 @@ describe('GetThreadUseCase', () => {
       id: 'thread-123',
       title: 'sebuah thread',
       body: 'sebuah body thread',
-      date: '2021-08-08T07:19:09.775Z',
+      date: new Date('2021-08-08T00:19:09.775Z'),
       username: 'dicoding',
       comments: [
         new DetailComment({
           id: 'comment-123',
           username: 'johndoe',
-          date: '2021-08-08T07:22:33.555Z',
+          date: new Date('2021-08-08T00:19:09.775Z'),
           content: 'sebuah comment',
-          is_delete:1,
+          is_delete: 1,
           replies: [
             new DetailReply({
               id: 'reply-123',
               comment_id: 'comment-123',
               content: 'sebuah balasan',
-              date: '2021-08-08T07:22:33.555Z',
+              date: new Date('2021-08-08T00:19:09.775Z'),
               username: 'johndoe',
               is_delete: 1,
             }),
@@ -36,7 +36,7 @@ describe('GetThreadUseCase', () => {
               id: 'reply-113',
               comment_id: 'comment-123',
               content: 'sebuah balasan',
-              date: '2021-08-08T07:22:33.555Z',
+              date: new Date('2021-08-08T00:19:09.775Z'),
               username: 'dicoding',
               is_delete: 2,
             }),
@@ -49,12 +49,12 @@ describe('GetThreadUseCase', () => {
     const mockCommentRepository = new CommentRepository();
     const mockReplyRepository = new ReplyRepository();
 
-    mockThreadRepository.verifyAvailableThread = jest.fn().mockImplementation(() => Promise.resolve());
+    mockThreadRepository.verifyAvailableThread = jest.fn(() => Promise.resolve());
     mockThreadRepository.getThreadById = jest.fn().mockImplementation(() => Promise.resolve({
       id: 'thread-123',
       title: 'sebuah thread',
       body: 'sebuah body thread',
-      date: '2021-08-08T07:19:09.775Z',
+      date: new Date('2021-08-08T00:19:09.775Z'),
       username: 'dicoding',
     }));
     mockCommentRepository.getCommentsByThreadId = jest.fn()
@@ -62,9 +62,9 @@ describe('GetThreadUseCase', () => {
         {
           id: 'comment-123',
           username: 'johndoe',
-          date: '2021-08-08T07:22:33.555Z',
+          date: new Date('2021-08-08T00:19:09.775Z'),
           content: 'sebuah comment',
-          is_delete:1,
+          is_delete: 1,
         },
       ]));
     mockReplyRepository.getRepliesByThreadId = jest.fn().mockImplementation(() => Promise.resolve([
@@ -72,7 +72,7 @@ describe('GetThreadUseCase', () => {
         id: 'reply-123',
         comment_id: 'comment-123',
         content: 'sebuah balasan',
-        date: '2021-08-08T07:22:33.555Z',
+        date: new Date('2021-08-08T00:19:09.775Z'),
         username: 'johndoe',
         is_delete: 1,
       },
@@ -80,7 +80,7 @@ describe('GetThreadUseCase', () => {
         id: 'reply-113',
         comment_id: 'comment-123',
         content: 'sebuah balasan',
-        date: '2021-08-08T07:22:33.555Z',
+        date: new Date('2021-08-08T00:19:09.775Z'),
         username: 'dicoding',
         is_delete: 2,
       },
@@ -95,9 +95,9 @@ describe('GetThreadUseCase', () => {
     const thread = await getThreadUseCase.execute(threadId);
 
     expect(thread).toStrictEqual(expectedThread);
-    expect(mockThreadRepository.verifyAvailableThread).toBeCalledWith(threadId);
-    expect(mockThreadRepository.getThreadById).toBeCalledWith(threadId);
-    expect(mockCommentRepository.getCommentsByThreadId).toBeCalledWith(threadId);
-    expect(mockReplyRepository.getRepliesByThreadId).toBeCalledWith(threadId);
+    expect(mockThreadRepository.verifyAvailableThread).toHaveBeenCalledWith(threadId);
+    expect(mockThreadRepository.getThreadById).toHaveBeenCalledWith(threadId);
+    expect(mockCommentRepository.getCommentsByThreadId).toHaveBeenCalledWith(threadId);
+    expect(mockReplyRepository.getRepliesByThreadId).toHaveBeenCalledWith(threadId);
   });
 });

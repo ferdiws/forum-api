@@ -8,10 +8,10 @@ const ServerTestHelper = {
       username: 'dicoding',
       password: 'secret',
       fullname: 'Dicoding Indonesia',
-    }
+    };
     await UsersTableTestHelper.addUser(payload);
     return Jwt.token.generate(payload, process.env.ACCESS_TOKEN_KEY);
-  }
-}
+  },
+};
 
 module.exports = ServerTestHelper;

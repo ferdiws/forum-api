@@ -1,13 +1,13 @@
 const AddReply = require('../AddReply');
 
-describe('an AddReply entities', () =>  {
+describe('an AddReply entities', () => {
   it('should throw error when payload did not contain needed property', () => {
     const payload = {};
     const userId = 'user-123';
     const threadId = 'thread-123';
     const commentId = 'comment-123';
 
-    expect(() => new AddReply(threadId, commentId, payload, userId)).toThrowError('ADD_REPLY.NOT_CONTAIN_NEEDED_PROPERTY');
+    expect(() => new AddReply(threadId, commentId, payload, userId)).toThrow('ADD_REPLY.NOT_CONTAIN_NEEDED_PROPERTY');
   });
 
   it('should throw error when payload did not meet data type specification', () => {
@@ -18,7 +18,7 @@ describe('an AddReply entities', () =>  {
     const threadId = 'thread-123';
     const commentId = 'comment-123';
     
-    expect(() => new AddReply(threadId, commentId, payload, userId)).toThrowError('ADD_REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION');
+    expect(() => new AddReply(threadId, commentId, payload, userId)).toThrow('ADD_REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION');
   });
 
   it('should throw error when userId invalid', () => {
@@ -29,7 +29,7 @@ describe('an AddReply entities', () =>  {
     const threadId = 'thread-123';
     const commentId = 'comment-123';
 
-    expect(() => new AddReply(threadId, commentId, payload, userId)).toThrowError('ADD_REPLY.NOT_CONTAIN_NEEDED_PROPERTY');
+    expect(() => new AddReply(threadId, commentId, payload, userId)).toThrow('ADD_REPLY.NOT_CONTAIN_NEEDED_PROPERTY');
   });
 
   it('should throw error when threadId invalid', () => {
@@ -40,7 +40,7 @@ describe('an AddReply entities', () =>  {
     const threadId = '';
     const commentId = 'comment-123';
 
-    expect(() => new AddReply(threadId, commentId, payload, userId)).toThrowError('ADD_REPLY.NOT_CONTAIN_NEEDED_PROPERTY');
+    expect(() => new AddReply(threadId, commentId, payload, userId)).toThrow('ADD_REPLY.NOT_CONTAIN_NEEDED_PROPERTY');
   });
 
   it('should throw error when commentId invalid', () => {
@@ -51,7 +51,7 @@ describe('an AddReply entities', () =>  {
     const threadId = 'thread-123';
     const commentId = '';
 
-    expect(() => new AddReply(threadId, commentId, payload, userId)).toThrowError('ADD_REPLY.NOT_CONTAIN_NEEDED_PROPERTY');
+    expect(() => new AddReply(threadId, commentId, payload, userId)).toThrow('ADD_REPLY.NOT_CONTAIN_NEEDED_PROPERTY');
   });
 
   it('should create addReply object correctly', () => {
@@ -62,7 +62,12 @@ describe('an AddReply entities', () =>  {
     const fakeThreadId = 'thread-123';
     const fakeCommentId = 'comment-123';
     
-    const { content, threadId, commentId, userId } = new AddReply(fakeThreadId, fakeCommentId, payload, fakeUserId);
+    const {
+      content,
+      threadId,
+      commentId,
+      userId,
+    } = new AddReply(fakeThreadId, fakeCommentId, payload, fakeUserId);
     
     expect(content).toEqual(payload.content);
     expect(threadId).toEqual(fakeThreadId);

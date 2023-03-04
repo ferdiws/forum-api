@@ -11,19 +11,21 @@ const AuthorizationError = require('../../../Commons/exceptions/AuthorizationErr
 describe('ThreadRepositoryPostgres', () => {
   afterEach(async () => {
     await CommentsTableTestHelper.cleanTable();
-    await ThreadsTableTestHelper.cleanTable();
-    await UsersTableTestHelper.cleanTable();
   });
    
   afterAll(async () => {
+    await ThreadsTableTestHelper.cleanTable();
+    await UsersTableTestHelper.cleanTable();
     await pool.end();
+  });
+
+  beforeAll(async () => {
+    await UsersTableTestHelper.addUser({ id: 'user-123' });
+    await ThreadsTableTestHelper.addThread({ id: 'thread-123' });
   });
 
   describe('addComment function', () => {
     it('should persist add comment', async () => {
-      await UsersTableTestHelper.addUser({ id: 'user-123' });
-      await ThreadsTableTestHelper.addThread({ id: 'thread-123' });
-
       const payload = {
         content: 'sebuah comment',
       };
@@ -41,9 +43,6 @@ describe('ThreadRepositoryPostgres', () => {
     });
 
     it('should return added comment correctly', async () => {
-      await UsersTableTestHelper.addUser({ id: 'user-123' });
-      await ThreadsTableTestHelper.addThread({ id: 'thread-123' });
-
       const payload = {
         content: 'sebuah comment',
       };
@@ -73,8 +72,6 @@ describe('ThreadRepositoryPostgres', () => {
     });
 
     it('should not throw error if comment is found', async () => {
-      await UsersTableTestHelper.addUser({ id: 'user-123' });
-      await ThreadsTableTestHelper.addThread({ id: 'thread-123' });
       await CommentsTableTestHelper.addComment({ id: 'comment-123' });
 
       const fakeIdGenerator = () => '123';
@@ -86,27 +83,15 @@ describe('ThreadRepositoryPostgres', () => {
 
   describe('verifyUserAccess function', () => {
     it('should return error if user does not have access', async () => {
-      await UsersTableTestHelper.addUser({ id: 'user-123' });
-      await ThreadsTableTestHelper.addThread({ id: 'thread-123' });
+      await CommentsTableTestHelper.addComment({ id: 'comment-123' });
 
-      const payload = {
-        content: 'sebuah comment',
-      };
-      const userId = 'user-123';
-      const threadId = 'thread-123';
-
-      const newComment = new AddComment(threadId, payload, userId);
       const fakeIdGenerator = () => '123';
       const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, fakeIdGenerator);
-
-      await commentRepositoryPostgres.addComment(newComment);
 
       await expect(commentRepositoryPostgres.verifyUserAccess('comment-123', 'user-111')).rejects.toThrow(AuthorizationError);
     });
 
     it('should not throw error if user has access', async () => {
-      await UsersTableTestHelper.addUser({ id: 'user-123' });
-      await ThreadsTableTestHelper.addThread({ id: 'thread-123' });
       await CommentsTableTestHelper.addComment({ id: 'comment-123' });
 
       const fakeIdGenerator = () => '123';
@@ -118,21 +103,14 @@ describe('ThreadRepositoryPostgres', () => {
 
   describe('deleteComment function', () => {
     it('should update is_delete to 1', async () => {
-      await UsersTableTestHelper.addUser({ id: 'user-123' });
-      await ThreadsTableTestHelper.addThread({ id: 'thread-123' });
-
-      const payload = {
-        content: 'sebuah comment',
-      };
+      await CommentsTableTestHelper.addComment({ id: 'comment-123' });
+      
       const userId = 'user-123';
       const threadId = 'thread-123';
       const commentId = 'comment-123';
       
-      const newComment = new AddComment(threadId, payload, userId);
       const fakeIdGenerator = () => '123';
       const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, fakeIdGenerator);
-
-      await commentRepositoryPostgres.addComment(newComment);
 
       await commentRepositoryPostgres.deleteComment(threadId, commentId, userId);
 
@@ -143,19 +121,19 @@ describe('ThreadRepositoryPostgres', () => {
 
   describe('getCommentsByThreadId function', () => {
     it('should return detail comments correctly', async () => {
-      await UsersTableTestHelper.addUser({ id: 'user-123' });
-      await ThreadsTableTestHelper.addThread({ id: 'thread-123' });
       await CommentsTableTestHelper.addComment({ id: 'comment-123' });
 
       const fakeIdGenerator = () => '123';
       const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, fakeIdGenerator);
       const comments = await commentRepositoryPostgres.getCommentsByThreadId('thread-123');
 
-      expect(comments[0].id).toEqual('comment-123');
-      expect(comments[0].content).toEqual('sebuah comment');
-      expect(comments[0].username).toEqual('dicoding');
-      expect(comments[0].date).toEqual('2021-08-08T07:19:09.775Z');
-      expect(comments[0].is_delete).toEqual(1);
+      expect(comments).toStrictEqual([{
+        id: 'comment-123',
+        content: 'sebuah comment',
+        username: 'dicoding',
+        date: new Date('2021-08-08T00:19:09.775Z'),
+        is_delete: 1,
+      }]);
     });
   });
 });

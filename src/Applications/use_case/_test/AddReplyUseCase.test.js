@@ -24,24 +24,23 @@ describe('AddReplyUseCase', () => {
     const mockCommentRepository = new CommentRepository();
     const mockReplyRepository = new ReplyRepository();
 
-    mockThreadRepository.verifyAvailableThread = jest.fn()
-      .mockImplementation(() => Promise.resolve());
-    mockCommentRepository.verifyAvailableComment = jest.fn()
-      .mockImplementation(() => Promise.resolve());
+    mockThreadRepository.verifyAvailableThread = jest.fn(() => Promise.resolve());
+    mockCommentRepository.verifyAvailableComment = jest.fn(() => Promise.resolve());
     mockReplyRepository.addReply = jest.fn()
       .mockImplementation(() => Promise.resolve(expectedAddedReply));
 
     const getReplyUseCase = new AddReplyUseCase({
       threadRepository: mockThreadRepository,
       commentRepository: mockCommentRepository,
-      replyRepository: mockReplyRepository
+      replyRepository: mockReplyRepository,
     });
 
     const addedReply = await getReplyUseCase.execute(threadId, commentId, useCasePayload, userId);
 
     expect(addedReply).toStrictEqual(expectedAddedReply);
-    expect(mockThreadRepository.verifyAvailableThread).toBeCalledWith(threadId);
-    expect(mockCommentRepository.verifyAvailableComment).toBeCalledWith(commentId);
-    expect(mockReplyRepository.addReply).toBeCalledWith(new AddReply(threadId, commentId, useCasePayload, userId));
+    expect(mockThreadRepository.verifyAvailableThread).toHaveBeenCalledWith(threadId);
+    expect(mockCommentRepository.verifyAvailableComment).toHaveBeenCalledWith(commentId);
+    expect(mockReplyRepository.addReply)
+      .toHaveBeenCalledWith(new AddReply(threadId, commentId, useCasePayload, userId));
   });
 });

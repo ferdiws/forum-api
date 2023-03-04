@@ -22,7 +22,7 @@ class CommentRepositoryPostgres extends CommentRepository {
      
     const result = await this._pool.query(query);
 
-    return new AddedComment({ ...result.rows[0] });
+    return new AddedComment(result.rows[0]);
   }
 
   async verifyAvailableComment(commentId) {
@@ -34,7 +34,7 @@ class CommentRepositoryPostgres extends CommentRepository {
     const result = await this._pool.query(query);
 
     if (!result.rowCount) {
-      throw new NotFoundError('tidak dapat menghapus komentar karena komentar tidak ditemukan');
+      throw new NotFoundError('tidak dapat menghapus komentar atau menambahkan/menghapus balasan karena komentar tidak ditemukan');
     }
   }
 
