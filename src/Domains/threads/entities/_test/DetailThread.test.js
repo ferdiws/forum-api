@@ -7,10 +7,10 @@ describe('a DetailThread entities', () => {
       id: 'thread-123',
       title: 'sebuah thread',
       body: 'sebuah body thread',
-      date: '2021-08-08T07:19:09.775Z',
+      date: new Date('2021-08-08T00:19:09.775Z'),
     };
 
-    expect(() => new DetailThread(payload)).toThrowError('DETAIL_THREAD.NOT_CONTAIN_NEEDED_PROPERTY');
+    expect(() => new DetailThread(payload)).toThrow('DETAIL_THREAD.NOT_CONTAIN_NEEDED_PROPERTY');
   });
 
   it('should throw error when payload did not meet data type specification', () => {
@@ -23,14 +23,14 @@ describe('a DetailThread entities', () => {
       comments: true,
     };
 
-    expect(() => new DetailThread(payload)).toThrowError('DETAIL_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION');
+    expect(() => new DetailThread(payload)).toThrow('DETAIL_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION');
   });
 
   it('should create detailThread object correctly', () => {
     const comment1 = {
       id: 'comment-123',
       username: 'johndoe',
-      date: '2021-08-08T07:22:33.555Z',
+      date: new Date('2021-08-08T00:19:09.775Z'),
       content: 'sebuah comment',
       replies: [],
       is_delete: 1,
@@ -38,7 +38,7 @@ describe('a DetailThread entities', () => {
     const comment2 = {
       id: 'comment-121',
       username: 'dicoding',
-      date: '2021-08-08T07:22:33.555Z',
+      date: new Date('2021-08-08T00:19:09.775Z'),
       content: 'sebuah comment',
       replies: [],
       is_delete: 1,
@@ -48,7 +48,7 @@ describe('a DetailThread entities', () => {
       id: 'thread-123',
       title: 'sebuah thread',
       body: 'sebuah body thread',
-      date: '2021-08-08T07:19:09.775Z',
+      date: new Date('2021-08-08T00:19:09.775Z'),
       username: 'dicoding',
       comments: [
         new DetailComment(comment1),

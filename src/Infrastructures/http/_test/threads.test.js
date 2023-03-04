@@ -119,7 +119,7 @@ describe('HTTP server', () => {
       const responseJson = JSON.parse(response.payload);
       expect(response.statusCode).toEqual(404);
       expect(responseJson.status).toEqual('fail');
-      expect(responseJson.message).toEqual('tidak dapat mencari thread atau menambahkan/menghapus komentar karena thread tidak ditemukan');
+      expect(responseJson.message).toEqual('tidak dapat mencari thread atau menambahkan/menghapus komentar atau balasan karena thread tidak ditemukan');
     });
   });
 });

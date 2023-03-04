@@ -23,12 +23,13 @@ describe('AddThreadUseCase', () => {
       .mockImplementation(() => Promise.resolve(expectedAddedThread));
 
     const getThreadUseCase = new AddThreadUseCase({
-      threadRepository: mockThreadRepository
+      threadRepository: mockThreadRepository,
     });
 
     const addedThread = await getThreadUseCase.execute(useCasePayload, userId);
 
     expect(addedThread).toStrictEqual(expectedAddedThread);
-    expect(mockThreadRepository.addThread).toBeCalledWith(new AddThread(useCasePayload, userId));
+    expect(mockThreadRepository.addThread)
+      .toHaveBeenCalledWith(new AddThread(useCasePayload, userId));
   });
 });

@@ -21,20 +21,20 @@ describe('AddCommentUseCase', () => {
     const mockThreadRepository = new ThreadRepository();
     const mockCommentRepository = new CommentRepository();
 
-    mockThreadRepository.verifyAvailableThread = jest.fn()
-      .mockImplementation(() => Promise.resolve());
+    mockThreadRepository.verifyAvailableThread = jest.fn(() => Promise.resolve());
     mockCommentRepository.addComment = jest.fn()
       .mockImplementation(() => Promise.resolve(expectedAddedComment));
 
     const getCommentUseCase = new AddCommentUseCase({
       threadRepository: mockThreadRepository,
-      commentRepository: mockCommentRepository
+      commentRepository: mockCommentRepository,
     });
 
     const addedComment = await getCommentUseCase.execute(threadId, useCasePayload, userId);
 
     expect(addedComment).toStrictEqual(expectedAddedComment);
-    expect(mockThreadRepository.verifyAvailableThread).toBeCalledWith(threadId);
-    expect(mockCommentRepository.addComment).toBeCalledWith(new AddComment(threadId, useCasePayload, userId));
+    expect(mockThreadRepository.verifyAvailableThread).toHaveBeenCalledWith(threadId);
+    expect(mockCommentRepository.addComment)
+      .toHaveBeenCalledWith(new AddComment(threadId, useCasePayload, userId));
   });
 });

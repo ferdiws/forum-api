@@ -14,11 +14,11 @@ class DetailReply {
     }
 
     if (
-      typeof id !== 'string' ||
-      typeof content !== 'string' ||
-      typeof date !== 'string' ||
-      typeof username !== 'string' ||
-      typeof is_delete !== 'number'
+      typeof id !== 'string'
+      || typeof content !== 'string'
+      || !(date instanceof Date)
+      || typeof username !== 'string'
+      || typeof is_delete !== 'number'
     ) {
       throw new Error('DETAIL_REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION');
     }

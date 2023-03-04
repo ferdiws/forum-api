@@ -5,12 +5,21 @@
         "es2021": true,
         "node": true
     },
-    "extends": "airbnb-base",
+    "extends": ["airbnb-base", "plugin:jest/recommended"],
     "overrides": [
     ],
     "parserOptions": {
         "ecmaVersion": "latest"
     },
     "rules": {
+        "linebreak-style": "off",
+        "no-underscore-dangle": "off",
+        "no-console": "off",
+        "no-trailing-spaces": "off",
+        "object-curly-newline": "off",
+        "class-methods-use-this": "off",
+        "no-unused-vars": "off",
+        "camelcase": "off",
+        "no-param-reassign": "off"
     }
 }

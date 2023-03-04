@@ -1,13 +1,13 @@
 const AddThread = require('../AddThread');
 
-describe('an AddThread entities', () =>  {
+describe('an AddThread entities', () => {
   it('should throw error when payload did not contain needed property', () => {
     const payload = {
       title: 'sebuah thread',
     };
     const userId = 'user-123';
 
-    expect(() => new AddThread(payload, userId)).toThrowError('ADD_THREAD.NOT_CONTAIN_NEEDED_PROPERTY');
+    expect(() => new AddThread(payload, userId)).toThrow('ADD_THREAD.NOT_CONTAIN_NEEDED_PROPERTY');
   });
 
   it('should throw error when userId invalid', () => {
@@ -17,7 +17,7 @@ describe('an AddThread entities', () =>  {
     };
     const userId = '';
 
-    expect(() => new AddThread(payload, userId)).toThrowError('ADD_THREAD.NOT_CONTAIN_NEEDED_PROPERTY');
+    expect(() => new AddThread(payload, userId)).toThrow('ADD_THREAD.NOT_CONTAIN_NEEDED_PROPERTY');
   });
 
   it('should throw error when payload did not meet data type specification', () => {
@@ -27,7 +27,7 @@ describe('an AddThread entities', () =>  {
     };
     const userId = 'user-123';
     
-    expect(() => new AddThread(payload, userId)).toThrowError('ADD_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION');
+    expect(() => new AddThread(payload, userId)).toThrow('ADD_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION');
   });
 
   it('should create addThread object correctly', () => {

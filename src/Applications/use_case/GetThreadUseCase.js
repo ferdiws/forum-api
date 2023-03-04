@@ -1,5 +1,6 @@
-const DetailComment = require("../../Domains/comments/entities/DetailComment");
-const DetailReply = require("../../Domains/replies/entities/DetailReply");
+const DetailComment = require('../../Domains/comments/entities/DetailComment');
+const DetailReply = require('../../Domains/replies/entities/DetailReply');
+const DetailThread = require('../../Domains/threads/entities/DetailThread');
 
 class GetThreadUseCase {
   constructor({ threadRepository, commentRepository, replyRepository }) {
@@ -18,15 +19,16 @@ class GetThreadUseCase {
       comments,
       replies,
     );
-    return thread;
+    return new DetailThread(thread);
   }
 
   _mapAdditionalAttributes(comments, replies) {
     return comments.map((comment) => {
-        comment.replies = replies
-          .filter((reply) => reply.comment_id === comment.id).map((reply) => new DetailReply(reply));
+      comment.replies = replies
+        .filter((reply) => reply.comment_id === comment.id)
+        .map((reply) => new DetailReply(reply));
 
-        return new DetailComment(comment);
+      return new DetailComment(comment);
     });
   }
 }

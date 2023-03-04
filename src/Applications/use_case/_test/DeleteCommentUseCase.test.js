@@ -11,21 +11,21 @@ describe('DeleteCommentUseCase', () => {
     const mockThreadRepository = new ThreadRepository();
     const mockCommentRepository = new CommentRepository();
 
-    mockThreadRepository.verifyAvailableThread = jest.fn().mockImplementation(() => Promise.resolve());
-    mockCommentRepository.verifyAvailableComment = jest.fn().mockImplementation(() => Promise.resolve());
-    mockCommentRepository.verifyUserAccess = jest.fn().mockImplementation(() => Promise.resolve());
-    mockCommentRepository.deleteComment = jest.fn().mockImplementation(() => Promise.resolve());
+    mockThreadRepository.verifyAvailableThread = jest.fn(() => Promise.resolve());
+    mockCommentRepository.verifyAvailableComment = jest.fn(() => Promise.resolve());
+    mockCommentRepository.verifyUserAccess = jest.fn(() => Promise.resolve());
+    mockCommentRepository.deleteComment = jest.fn(() => Promise.resolve());
 
     const getCommentUseCase = new DeleteCommentUseCase({
       threadRepository: mockThreadRepository,
-      commentRepository: mockCommentRepository
+      commentRepository: mockCommentRepository,
     });
 
-    await expect(getCommentUseCase.execute(threadId, commentId, userId)).resolves.not.toThrowError();
+    await getCommentUseCase.execute(threadId, commentId, userId);
 
-    expect(mockThreadRepository.verifyAvailableThread).toBeCalledWith(threadId);
-    expect(mockCommentRepository.verifyAvailableComment).toBeCalledWith(commentId);
-    expect(mockCommentRepository.verifyUserAccess).toBeCalledWith(commentId, userId);
-    expect(mockCommentRepository.deleteComment).toBeCalledWith(threadId, commentId, userId);
+    expect(mockThreadRepository.verifyAvailableThread).toHaveBeenCalledWith(threadId);
+    expect(mockCommentRepository.verifyAvailableComment).toHaveBeenCalledWith(commentId);
+    expect(mockCommentRepository.verifyUserAccess).toHaveBeenCalledWith(commentId, userId);
+    expect(mockCommentRepository.deleteComment).toHaveBeenCalledWith(threadId, commentId, userId);
   });
 });

@@ -5,11 +5,11 @@ describe('a DetailComment entities', () => {
     const payload = {
       id: 'comment-123',
       username: 'johndoe',
-      date: '2021-08-08T07:22:33.555Z',
+      date: new Date('2021-08-08T00:19:09.775Z'),
       is_delete: 0,
     };
 
-    expect(() => new DetailComment(payload)).toThrowError('DETAIL_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY');
+    expect(() => new DetailComment(payload)).toThrow('DETAIL_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY');
   });
 
   it('should throw error when payload did not meet data type specification', () => {
@@ -22,14 +22,14 @@ describe('a DetailComment entities', () => {
       is_delete: true,
     };
 
-    expect(() => new DetailComment(payload)).toThrowError('DETAIL_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION');
+    expect(() => new DetailComment(payload)).toThrow('DETAIL_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION');
   });
 
   it('should create detailComment object correctly', () => {
     const payload = {
       id: 'comment-123',
       username: 'johndoe',
-      date: '2021-08-08T07:22:33.555Z',
+      date: new Date('2021-08-08T00:19:09.775Z'),
       content: 'sebuah comment',
       replies: [],
       is_delete: 1,
@@ -48,7 +48,7 @@ describe('a DetailComment entities', () => {
     const payload = {
       id: 'comment-123',
       username: 'johndoe',
-      date: '2021-08-08T07:22:33.555Z',
+      date: new Date('2021-08-08T00:19:09.775Z'),
       content: 'sebuah comment',
       replies: [],
       is_delete: 2,
