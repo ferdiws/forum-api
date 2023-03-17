@@ -3,6 +3,7 @@ const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper');
 const CommentsTableTestHelper = require('../../../../tests/CommentsTableTestHelper');
 const RepliesTableTestHelper = require('../../../../tests/RepliesTableTestHelper');
+const LikesTableTestHelper = require('../../../../tests/LikesTableTestHelper');
 const ServerTestHelper = require('../../../../tests/ServerTestHelper');
 const container = require('../../container');
 const createServer = require('../createServer');
@@ -17,6 +18,7 @@ describe('HTTP server', () => {
     await ThreadsTableTestHelper.cleanTable();
     await CommentsTableTestHelper.cleanTable();
     await RepliesTableTestHelper.cleanTable();
+    await LikesTableTestHelper.cleanTable();
   });
 
   describe('when POST /threads', () => {
@@ -95,6 +97,7 @@ describe('HTTP server', () => {
       await ThreadsTableTestHelper.addThread({ id: 'thread-123' });
       await CommentsTableTestHelper.addComment({ id: 'comment-123' });
       await RepliesTableTestHelper.addReply({ id: 'reply-123' });
+      await LikesTableTestHelper.addLike({ id: 'like-123' });
       const server = await createServer(container);
 
       const response = await server.inject({
